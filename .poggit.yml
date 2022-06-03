@@ -1,0 +1,8 @@
+---
+branches:
+  - main
+projects:
+  SmeltingAccelerator:
+    path: ""
+    icon: "assets/icon.png"
+...
