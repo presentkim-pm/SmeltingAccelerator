@@ -58,6 +58,7 @@ final class SmeltingAccelerator extends Task{
     ){
         $this->accelerate = Closure::bind( //HACK: Closure bind hack to access inaccessible members
             closure: function(Furnace $furnace, int $additionalTime) : void{
+                /** @var SmeltingAccelerator $this */
                 while($additionalTime > 0){
                     if($furnace->maxFuelTime <= 0){
                         $this->removeFurnace($furnace);
