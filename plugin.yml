@@ -4,5 +4,5 @@ main: kim\present\smeltingaccelerator\Main
 version: 0.0.1
 api: 4.0.0
 author: PresentKim
-description: Make glowing when holding light source! (like torch)
+description: Multiplies the speed of the furnace!
 ...
