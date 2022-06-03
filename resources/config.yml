@@ -1,0 +1,11 @@
+# Main configuration file for SmeltingAccelerator
+# Some of these settings are safe, others can break your server if modified incorrectly
+# New settings/defaults won't appear automatically in this file when upgrading.
+
+# Smelting acceleration multiplier [int: multiple] (default: 2)
+# An integer greater than 1 is required.
+accelerate-multiplier: 2
+
+# SmeltingAccelerator update delay [flot: seconds] (default: 0.25)
+# It is recommended to be as high as possible. Lower = more CPU, check more often
+update-delay: 0.25

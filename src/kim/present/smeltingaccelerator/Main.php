@@ -28,10 +28,67 @@ declare(strict_types=1);
 
 namespace kim\present\smeltingaccelerator;
 
+use pocketmine\block\inventory\FurnaceInventory;
+use pocketmine\block\tile\Furnace;
+use pocketmine\event\inventory\FurnaceBurnEvent;
+use pocketmine\event\inventory\InventoryOpenEvent;
 use pocketmine\event\Listener;
 use pocketmine\plugin\PluginBase;
 
 final class Main extends PluginBase implements Listener{
+    private SmeltingAccelerator $accelerator;
+
     protected function onEnable() : void{
+        $accelerateMultiplier = $this->getConfig()->getNested("accelerate-multiplier", 2);
+        if($accelerateMultiplier < 2){
+            $this->getLogger()->error("Accelerate multiplier must be greater than 1");
+            $this->getServer()->getPluginManager()->disablePlugin($this);
+            return;
+        }
+
+        $updateDelay = $this->getConfig()->getNested("update-delay", 0.25) * 20;
+        if($updateDelay <= 0){
+            $this->getLogger()->warning("Update delay must be greater than 0, It applied to 0.05 seconds.");
+            $updateDelay = 1;
+        }
+
+        $this->accelerator = new SmeltingAccelerator(
+            $this,
+            (int) $accelerateMultiplier,
+            (int) $updateDelay
+        );
+
+        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+    }
+
+    public function getAccelerator() : SmeltingAccelerator{
+        return $this->accelerator;
+    }
+
+    /**
+     * @priority HIGHEST
+     * Handling the furnace burn event to register with the accelerator
+     */
+    public function onFurnaceBurn(FurnaceBurnEvent $event) : void{
+        $this->accelerator->addFurnace($event->getFurnace());
+    }
+
+    /**
+     * @priority HIGHEST
+     * Handling inventory open event to re-register if furnace is not updated
+     */
+    public function onInventoryOpen(InventoryOpenEvent $event) : void{
+        $inventory = $event->getInventory();
+        if(!$inventory instanceof FurnaceInventory){
+            return;
+        }
+
+        $pos = $inventory->getHolder();
+        $tile = $pos->getWorld()->getTile($pos);
+        if(!$tile instanceof Furnace){
+            return;
+        }
+
+        $this->accelerator->addFurnace($tile);
     }
 }
