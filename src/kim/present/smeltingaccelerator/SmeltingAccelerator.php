@@ -47,7 +47,10 @@ final class SmeltingAccelerator extends Task{
      */
     private Closure $accelerate;
 
-    /** @var array<string, Furnace> */
+    /**
+     * @var Furnace[]
+     * @phpstan-var array<string, Furnace>
+     */
     private array $furnaces = [];
 
     public function __construct(
