@@ -12,9 +12,9 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author  PresentKim (debe3721@gmail.com)
- * @link    https://github.com/PresentKim
- * @license https://www.gnu.org/licenses/lgpl-3.0 LGPL-3.0 License
+ * @author       PresentKim (debe3721@gmail.com)
+ * @link         https://github.com/PresentKim
+ * @license      https://www.gnu.org/licenses/lgpl-3.0 LGPL-3.0 License
  *
  *   (\ /)
  *  ( . .) ♥
@@ -39,6 +39,7 @@ use pocketmine\Server;
 use function min;
 
 final class SmeltingAccelerator extends Task{
+
     private int $lastTick;
 
     /**
@@ -71,7 +72,10 @@ final class SmeltingAccelerator extends Task{
                     $product = $inv->getResult();
                     $type = $furnace->getFurnaceType();
                     $smelt = Server::getInstance()->getCraftingManager()->getFurnaceRecipeManager($type)->match($raw);
-                    $canSmelt = ($smelt instanceof FurnaceRecipe && $raw->getCount() > 0 && (($smelt->getResult()->equals($product) && $product->getCount() < $product->getMaxStackSize()) || $product->isNull()));
+                    $canSmelt = ($smelt instanceof FurnaceRecipe && $raw->getCount() > 0
+                        && (($smelt->getResult()->equals($product)
+                                && $product->getCount() < $product->getMaxStackSize())
+                            || $product->isNull()));
 
                     if($canSmelt){
                         $currentAdditionalTime = min(
@@ -168,6 +172,7 @@ final class SmeltingAccelerator extends Task{
 
     public static function hashBlockPos(Block|Tile $obj) : string{
         $pos = $obj->getPosition();
-        return $pos->getFloorX() . ":" . $pos->getFloorY() . ":" . $pos->getFloorZ() . ":" . $pos->getWorld()->getFolderName();
+        return $pos->getFloorX() . ":" . $pos->getFloorY() . ":" . $pos->getFloorZ() . ":" . $pos->getWorld()
+                                                                                                 ->getFolderName();
     }
 }
